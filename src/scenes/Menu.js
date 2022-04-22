@@ -25,7 +25,7 @@ class Menu extends Phaser.Scene {
         }
 
         //menu text
-        this.add.text(game.config.width/2, game.config.height/2 - borderUISize - borderPadding, "THIS IS A GAME NAME", menuConfig).setOrigin(0.5);
+        this.add.text(game.config.width/2, game.config.height/2 - borderUISize - borderPadding, "Sky Box", menuConfig).setOrigin(0.5);
         this.add.text(game.config.width/2, game.config.height/2, "Press Space to Play", menuConfig).setOrigin(0.5);
 
         //define keys
