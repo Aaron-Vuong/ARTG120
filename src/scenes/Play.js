@@ -12,9 +12,10 @@ class Play extends Phaser.Scene {
         this.sky = this.add.tileSprite(0, 0, 640, 480, 'sky').setOrigin(0,0);
 
         //add cloud platforms
-        this.cloud1 = new Cloud(this, game.config.width + borderUISize*6, borderUISize*4, 'cloud', 0).setOrigin(0,0);
-        this.cloud2 = new Cloud(this, game.config.width + borderUISize*3, borderUISize*5 + borderPadding*2, 'cloud', 0).setOrigin(0,0);
-        this.cloud3 = new Cloud(this, game.config.width, borderUISize*6 + borderPadding*4, 'cloud', 0).setOrigin(0,0);
+        this.cloud1 = new Cloud(this, game.config.width + borderUISize*14, borderUISize*8, 'cloud', 0).setOrigin(0,0);
+        this.cloud2 = new Cloud(this, game.config.width + borderUISize*6, borderUISize*7 + borderPadding*4, 'cloud', 0).setOrigin(0,0);
+        this.cloud3 = new Cloud(this, game.config.width, borderUISize*9 + borderPadding*6, 'cloud', 0).setOrigin(0,0);
+        this.cloud4 = new Cloud(this, game.config.width +  borderUISize*20, borderUISize*9 + borderPadding*4, 'cloud', 0).setOrigin(0,0);
 
         let playConfig = {
             fontFamily: 'Courier',
@@ -35,5 +36,10 @@ class Play extends Phaser.Scene {
     update() {
 
         this.sky.tilePositionX -= 3;
+
+        this.cloud1.update();
+        this.cloud2.update();
+        this.cloud3.update();
+        this.cloud4.update();
     }
 }
