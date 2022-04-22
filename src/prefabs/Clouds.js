@@ -4,7 +4,7 @@ class Cloud extends Phaser.GameObjects.Sprite {
         super(scene, x, y, texture, frame);
 
         scene.add.existing(this);
-        this.speed = 3;
+        this.speed = game.settings.cloudSpeed;
     }
 
     update() {

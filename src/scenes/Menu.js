@@ -34,9 +34,19 @@ class Menu extends Phaser.Scene {
 
     update() {
 
+        //this.timePassed = this.clock.getElapsed().toFixed(0);
+
+        /*if(this.timePassed / 100) {
+            this.cloudSpeed += 1;
+        }*/
+
         this.opening.tilePositionX -= 3;
 
         if (Phaser.Input.Keyboard.JustDown(keySPACE)) {
+
+            game.settings = {
+                cloudSpeed: 3
+            }
             this.scene.start('playScene');
         }
     }
