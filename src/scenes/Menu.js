@@ -27,9 +27,11 @@ class Menu extends Phaser.Scene {
         //menu text
         this.add.text(game.config.width/2, game.config.height/2 - borderUISize - borderPadding, "Sky Box", menuConfig).setOrigin(0.5);
         this.add.text(game.config.width/2, game.config.height/2, "Press Space to Play", menuConfig).setOrigin(0.5);
-
+        
         //define keys
         keySPACE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
+        keyLEFT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
+        keyRIGHT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
     }
 
     update() {
