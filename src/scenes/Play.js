@@ -5,7 +5,7 @@ class Play extends Phaser.Scene {
 
     preload() {
         this.load.image('sky', './assets/sky.png');
-        this.load.image('player', './assets/player.png');
+        this.load.image('player', './assets/Bunny.png');
         this.load.image('cloud', './assets/cloud.png');
     }
 
@@ -40,6 +40,8 @@ class Play extends Phaser.Scene {
         this.physics.add.collider(this.sprites, this.clouds);
         this.sprites.add(sprite);
         this.player = new Player(this, game.config.width/2, game.config.height/2 - borderUISize - borderPadding, 'player', 0, sprite).setOrigin(0.5, 0);
+        this.player.scale = 0.1;
+        sprite.scale = 0.1;
 
         //add cloud platforms
         this.cloud1 = new Cloud(this, game.config.width + borderUISize*14, borderUISize*8, 'cloud', 0).setOrigin(0,0);
