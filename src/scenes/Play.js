@@ -71,9 +71,7 @@ class Play extends Phaser.Scene {
             fixedWidth: 0
         }
 
-        //this.setText('Time: ' + timedEvent.getElapsedSeconds().toString().substr(0,4));
-
-        this.add.text(borderUISize + borderPadding*45, borderUISize + borderPadding*2, 'Time: ' + timedEvent.getElapsedSeconds().toString(), playConfig).setOrigin(0.5);
+        this.add.text(borderUISize + borderPadding*45, borderUISize + borderPadding*2, 'Score: ', playConfig).setOrigin(0.5);
         keySPACE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
         keyLEFT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
         keyRIGHT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
@@ -91,6 +89,7 @@ class Play extends Phaser.Scene {
         this.cloud2.update();
         this.cloud3.update();
         this.cloud4.update();
+
     }
 
     onEvent() {
