@@ -19,3 +19,6 @@ let borderPadding = borderUISize / 3;
 
 //keyboard variables
 let keyLEFT, keyRIGHT, keySPACE;
+
+//timer variable
+let timedEvent;
