@@ -63,7 +63,7 @@ class Play extends Phaser.Scene {
             fixedWidth: 0
         }
 
-        this.add.text(game.config.width/2, game.config.height/2 - borderUISize - borderPadding, 'THIS IS A PLAY SCENE', playConfig).setOrigin(0.5);
+        this.add.text(borderUISize + borderPadding*45, borderUISize + borderPadding*2, 'Score: ', playConfig).setOrigin(0.5);
         keySPACE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
         keyLEFT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
         keyRIGHT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
