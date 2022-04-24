@@ -2,7 +2,6 @@ class Player extends Phaser.GameObjects.Sprite {
     constructor(scene, x, y, texture, frame, sprite) {
         super(scene, x, y, texture, frame);
 
-        scene.add.existing(this);
         this.moveSpeed = 160;
         this.isGrounded = true;
         this.sprite = sprite;

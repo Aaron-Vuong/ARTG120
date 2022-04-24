@@ -11,27 +11,23 @@ class Play extends Phaser.Scene {
 
     create() {
         this.sky = this.add.tileSprite(0, 0, 640, 480, 'sky').setOrigin(0,0);
-        this.clouds = this.add.group();
-        const _cloud1 = this.physics.add.sprite(game.config.width + borderUISize*14, borderUISize*8, 'cloud');
-        const _cloud2 = this.physics.add.sprite(game.config.width + borderUISize*6, borderUISize*7 + borderPadding*4, 'cloud');
-        const _cloud3 = this.physics.add.sprite(game.config.width, borderUISize*9 + borderPadding*6, 'cloud');
-        const _cloud4 = this.physics.add.sprite(game.config.width +  borderUISize*20, borderUISize*9 + borderPadding*4, 'cloud');
-        _cloud1.setCollideWorldBounds(true);
-        _cloud1.setVelocity(100, 0);
-        _cloud2.setCollideWorldBounds(true);
-        _cloud2.setVelocity(100, 0);
-        _cloud3.setCollideWorldBounds(true);
-        _cloud3.setVelocity(100, 0);
-        _cloud4.setCollideWorldBounds(true);
-        _cloud4.setVelocity(100, 0);
+
+        this.clouds = this.add.group({
+            immovable: true,
+            allowGravity: false
+        });
+        const _cloud1 = this.physics.add.sprite(game.config.width + borderUISize*14, borderUISize*8, 'cloud').setImmovable(true);
+        const _cloud2 = this.physics.add.sprite(game.config.width + borderUISize*6, borderUISize*7 + borderPadding*4, 'cloud').setImmovable(true);
+        const _cloud3 = this.physics.add.sprite(game.config.width, borderUISize*9 + borderPadding*6, 'cloud').setImmovable(true);
+        const _cloud4 = this.physics.add.sprite(game.config.width +  borderUISize*20, borderUISize*9 + borderPadding*4, 'cloud').setImmovable(true);
+        _cloud1.body.setAllowGravity(false);
+        _cloud2.body.setAllowGravity(false);
+        _cloud3.body.setAllowGravity(false);
+        _cloud4.body.setAllowGravity(false);
         this.clouds.add(_cloud1);
         this.clouds.add(_cloud2);
         this.clouds.add(_cloud3);
         this.clouds.add(_cloud4);
-        this.cloud1 = new Cloud(this, game.config.width + borderUISize*14, borderUISize*8, 'cloud', 0).setOrigin(0,0);
-        this.cloud2 = new Cloud(this, game.config.width + borderUISize*6, borderUISize*7 + borderPadding*4, 'cloud', 0).setOrigin(0,0);
-        this.cloud3 = new Cloud(this, game.config.width, borderUISize*9 + borderPadding*6, 'cloud', 0).setOrigin(0,0);
-        this.cloud4 = new Cloud(this, game.config.width +  borderUISize*20, borderUISize*9 + borderPadding*4, 'cloud', 0).setOrigin(0,0);
 
         this.sprites = this.add.group();
         const sprite = this.physics.add.sprite(game.config.width/2, 50, 'player');
@@ -39,15 +35,24 @@ class Play extends Phaser.Scene {
         sprite.setVelocity(0, 0);
         this.physics.add.collider(this.sprites, this.clouds);
         this.sprites.add(sprite);
+
         this.player = new Player(this, game.config.width/2, game.config.height/2 - borderUISize - borderPadding, 'player', 0, sprite).setOrigin(0.5, 0);
         this.player.scale = 0.1;
         sprite.scale = 0.1;
+        console.log(game.config.width + borderUISize*14, borderUISize*8);
+        console.log(game.config.width + borderUISize*6, borderUISize*7 + borderPadding*4);
+        console.log(game.config.width, borderUISize*9 + borderPadding*6);
+        console.log(game.config.width + borderUISize*20, borderUISize*9 + borderPadding*4);
+        this.cloud1 = new Cloud(this, game.config.width + borderUISize*14, borderUISize*8, 'cloud', 0, _cloud1).setOrigin(0,0);
+        this.cloud2 = new Cloud(this, game.config.width + borderUISize*6, borderUISize*7 + borderPadding*4, 'cloud', 0, _cloud2).setOrigin(0,0);
+        this.cloud3 = new Cloud(this, game.config.width, borderUISize*9 + borderPadding*6, 'cloud', 0, _cloud3).setOrigin(0,0);
+        this.cloud4 = new Cloud(this, game.config.width + borderUISize*20, borderUISize*9 + borderPadding*4, 'cloud', 0, _cloud4).setOrigin(0,0);
 
-        //add cloud platforms
-        this.cloud1 = new Cloud(this, game.config.width + borderUISize*14, borderUISize*8, 'cloud', 0).setOrigin(0,0);
-        this.cloud2 = new Cloud(this, game.config.width + borderUISize*6, borderUISize*7 + borderPadding*4, 'cloud', 0).setOrigin(0,0);
-        this.cloud3 = new Cloud(this, game.config.width, borderUISize*9 + borderPadding*6, 'cloud', 0).setOrigin(0,0);
-        this.cloud4 = new Cloud(this, game.config.width +  borderUISize*20, borderUISize*9 + borderPadding*4, 'cloud', 0).setOrigin(0,0);
+        // //add cloud platforms
+        // this.cloud1 = new Cloud(this, game.config.width + borderUISize*14, borderUISize*8, 'cloud', 0).setOrigin(0,0);
+        // this.cloud2 = new Cloud(this, game.config.width + borderUISize*6, borderUISize*7 + borderPadding*4, 'cloud', 0).setOrigin(0,0);
+        // this.cloud3 = new Cloud(this, game.config.width, borderUISize*9 + borderPadding*6, 'cloud', 0).setOrigin(0,0);
+        // this.cloud4 = new Cloud(this, game.config.width +  borderUISize*20, borderUISize*9 + borderPadding*4, 'cloud', 0).setOrigin(0,0);
 
         //timer
         timedEvent = this.time.addEvent({
