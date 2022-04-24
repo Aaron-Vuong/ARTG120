@@ -93,7 +93,7 @@ class Play extends Phaser.Scene {
     }
 
     onEvent() {
-        game.settings.cloudSpeed += 1;
+        game.settings.cloudSpeed += 0.25;
         console.log(game.settings.cloudSpeed);
     }
 }

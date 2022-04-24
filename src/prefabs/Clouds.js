@@ -9,7 +9,7 @@ class Cloud extends Phaser.GameObjects.Sprite {
 
     update() {
         //move clouds left
-        this.x -= this.speed;
+        this.x -= game.settings.cloudSpeed;
 
         //wrap around screen
         if(this.x <= 0 - this.width) {
