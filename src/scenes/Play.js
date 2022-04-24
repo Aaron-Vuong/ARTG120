@@ -12,8 +12,7 @@ class Play extends Phaser.Scene {
     create() {
         this.sky = this.add.tileSprite(0, 0, 640, 480, 'sky').setOrigin(0,0);
 
-
-
+        // Create clouds and set attributes
         this.clouds = this.add.group({
             immovable: true,
             allowGravity: false
@@ -31,17 +30,21 @@ class Play extends Phaser.Scene {
         this.clouds.add(_cloud3);
         this.clouds.add(_cloud4);
 
+        // Create sprite and set attributes
         this.sprites = this.add.group();
         const sprite = this.physics.add.sprite(game.config.width/2, 50, 'player');
         sprite.setBounce(1, 1);
-        this.physics.add.collider(this.sprites, this.clouds);
         this.sprites.add(sprite);
 
+        // Add colliders to both sprite and clouds
+        this.physics.add.collider(this.sprites, this.clouds);
+
+        // Create the player with the reference to player sprite
         this.player = new Player(this, game.config.width/2, game.config.height/2 - borderUISize - borderPadding, 'player', 0, sprite).setOrigin(0.5, 0);
         this.player.scale = 0.1;
         sprite.scale = 0.1;
-        // //add cloud platforms
 
+        // add cloud platforms
         this.cloud1 = new Cloud(this, game.config.width + borderUISize*14, borderUISize*8, 'cloud', 0, _cloud1).setOrigin(0,0);
         this.cloud2 = new Cloud(this, game.config.width + borderUISize*6, borderUISize*7 + borderPadding*4, 'cloud', 0, _cloud2).setOrigin(0,0);
         this.cloud3 = new Cloud(this, game.config.width, borderUISize*9 + borderPadding*6, 'cloud', 0, _cloud3).setOrigin(0,0);
@@ -69,9 +72,17 @@ class Play extends Phaser.Scene {
             fixedWidth: 0
         }
 
+        // GAME OVER flag
         this.gameOver = false;
 
+        // Score text
         this.Score = this.add.text(borderUISize + borderPadding*45, borderUISize + borderPadding*2, 'Score: ' + game.settings.cloudSpeed, playConfig).setOrigin(0.5);
+
+        // Define keys that are used
+        //   SPACE: Used for Jump (Outdated)
+        //   LEFT: Used to go left or to go to Menu at GameOver
+        //   RIGHT: Used to go right
+        //   R: Used to restart play scene
         keySPACE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
         keyLEFT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
         keyRIGHT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
@@ -109,7 +120,7 @@ class Play extends Phaser.Scene {
     onEvent() {
         game.settings.cloudSpeed += 0.25;
         this.Score.text = "Score: " + game.settings.cloudSpeed; 
-        console.log(game.settings.cloudSpeed);
+        // console.log(game.settings.cloudSpeed);
     }
 
     checkGameOver(player) {
