@@ -36,7 +36,7 @@ class Play extends Phaser.Scene {
         this.sprites = this.add.group();
         const sprite = this.physics.add.sprite(game.config.width/2, 50, 'player');
         sprite.setCollideWorldBounds(true);
-        sprite.setVelocity(100, 0);
+        sprite.setVelocity(0, 0);
         this.physics.add.collider(this.sprites, this.clouds);
         this.sprites.add(sprite);
         this.player = new Player(this, game.config.width/2, game.config.height/2 - borderUISize - borderPadding, 'player', 0, sprite).setOrigin(0.5, 0);
