@@ -10,7 +10,7 @@ class Cloud extends Phaser.GameObjects.Sprite {
 
     update() {
         //move clouds left
-        this.sprite.setVelocityX(-this.speed * 100);
+        this.sprite.setVelocityX(-game.settings.cloudSpeed * 100);
         if (this.orig_y != this.sprite.y) {
             this.sprite.y = this.orig_y;
         }

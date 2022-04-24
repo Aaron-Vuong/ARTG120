@@ -47,7 +47,8 @@ class Menu extends Phaser.Scene {
         if (Phaser.Input.Keyboard.JustDown(keySPACE)) {
 
             game.settings = {
-                cloudSpeed: 3
+                cloudSpeed: 3,
+                cloudSpeedOrig: 3
             }
             this.scene.start('playScene');
         }
