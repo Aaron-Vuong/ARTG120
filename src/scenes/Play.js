@@ -71,7 +71,7 @@ class Play extends Phaser.Scene {
 
         this.gameOver = false;
 
-        this.add.text(borderUISize + borderPadding*45, borderUISize + borderPadding*2, 'Score: ', playConfig).setOrigin(0.5);
+        this.Score = this.add.text(borderUISize + borderPadding*45, borderUISize + borderPadding*2, 'Score: ' + game.settings.cloudSpeed, playConfig).setOrigin(0.5);
         keySPACE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
         keyLEFT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
         keyRIGHT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
@@ -108,6 +108,7 @@ class Play extends Phaser.Scene {
 
     onEvent() {
         game.settings.cloudSpeed += 0.25;
+        this.Score.text = "Score: " + game.settings.cloudSpeed; 
         console.log(game.settings.cloudSpeed);
     }
 
