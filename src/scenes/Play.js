@@ -52,7 +52,7 @@ class Play extends Phaser.Scene {
 
         //timer
         timedEvent = this.time.addEvent({
-            delay: 2500,
+            delay: 500,
             callback: this.onEvent,
             callbackScope: this,
             loop: true
@@ -92,10 +92,10 @@ class Play extends Phaser.Scene {
     update() {
 
         this.sky.tilePositionX -= 3;
-
-        // console.log(game.settings.cloudSpeed);
         
         this.checkGameOver(this.player);
+
+        this.elapsed = timedEvent.getElapsedSeconds();
 
         if (this.gameOver) {
             this.displayEnd();
@@ -115,12 +115,14 @@ class Play extends Phaser.Scene {
             this.cloud3.update();
             this.cloud4.update();           
         }
+
     }
 
     onEvent() {
-        game.settings.cloudSpeed += 0.25;
-        this.Score.text = "Score: " + game.settings.cloudSpeed; 
-        // console.log(game.settings.cloudSpeed);
+        game.settings.cloudSpeed += 0.25; 
+
+        this.Score.text = "Score: " + Math.floor(game.settings.cloudSpeed * 0.5); 
+        
     }
 
     checkGameOver(player) {
@@ -143,6 +145,8 @@ class Play extends Phaser.Scene {
             
             fixedWidth: 0
         }
+
+        timedEvent.remove();
         
         this.add.text(game.config.width/2, game.config.height/2, 'GAME OVER', playConfig).setOrigin(0.5);
         this.add.text(game.config.width/2, game.config.height/2 + 64, 'Press (R) to Restart or ← to Menu', playConfig).setOrigin(0.5);
