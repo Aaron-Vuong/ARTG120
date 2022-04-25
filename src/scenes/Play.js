@@ -34,6 +34,7 @@ class Play extends Phaser.Scene {
         this.sprites = this.add.group();
         const sprite = this.physics.add.sprite(game.config.width/2, 50, 'player');
         sprite.setBounce(1, 1);
+        sprite.setMass(30);
         this.sprites.add(sprite);
 
         // Add colliders to both sprite and clouds
@@ -80,13 +81,15 @@ class Play extends Phaser.Scene {
 
         // Define keys that are used
         //   SPACE: Used for Jump (Outdated)
-        //   LEFT: Used to go left or to go to Menu at GameOver
-        //   RIGHT: Used to go right
+        //   LEFT/A: Used to go left or to go to Menu at GameOver
+        //   RIGHT/D: Used to go right
         //   R: Used to restart play scene
         keySPACE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
         keyLEFT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
         keyRIGHT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
         keyR = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R);
+        keyA = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
+        keyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
     }
 
     update() {
