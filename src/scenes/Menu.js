@@ -37,7 +37,7 @@ class Menu extends Phaser.Scene {
 
     update() {
 
-        this.opening.tilePositionX -= 3;
+        this.opening.tilePositionX += 3;
 
         if (Phaser.Input.Keyboard.JustDown(keySPACE)) {
 

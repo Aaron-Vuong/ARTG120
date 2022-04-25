@@ -91,7 +91,7 @@ class Play extends Phaser.Scene {
 
     update() {
 
-        this.sky.tilePositionX -= 3;
+        this.sky.tilePositionX += 3;
         
         this.checkGameOver(this.player);
 
@@ -121,6 +121,7 @@ class Play extends Phaser.Scene {
     onEvent() {
         game.settings.cloudSpeed += 0.25; 
 
+        //display score in whole numbers
         this.Score.text = "Score: " + Math.floor(game.settings.cloudSpeed * 0.5); 
         
     }
