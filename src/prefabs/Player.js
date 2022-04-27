@@ -16,9 +16,6 @@ class Player extends Phaser.GameObjects.Sprite {
         else {
             this.sprite.setVelocityX(0);
         }
-        // if (Phaser.Input.Keyboard.JustDown(keySPACE) && this.isGrounded) {
-        //     this.sprite.setVelocity(100, -300);
-        // }
     }
 
 }

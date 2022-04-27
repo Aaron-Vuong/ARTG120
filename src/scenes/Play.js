@@ -7,11 +7,11 @@ class Play extends Phaser.Scene {
         this.load.image('sky', './assets/sky.png');
         this.load.image('player', './assets/Bunny.png');
         this.load.image('cloud', './assets/cloud.png');
+        this.load.image('obstacle', './assets/player.png');
     }
 
     create() {
         this.sky = this.add.tileSprite(0, 0, 640, 480, 'sky').setOrigin(0,0);
-
         // Create clouds and set attributes
         this.clouds = this.add.group({
             immovable: true,
@@ -32,9 +32,11 @@ class Play extends Phaser.Scene {
 
         // Create sprite and set attributes
         this.sprites = this.add.group();
-        const sprite = this.physics.add.sprite(game.config.width/2, 50, 'player');
+        const sprite = this.physics.add.sprite(game.config.width/2, game.config.height/2 - borderUISize*4 - borderPadding*2, 'player');
         sprite.setBounce(1, 1);
-        sprite.setMass(30);
+        // sprite.body.setAllowGravity(false);
+        // sprite.body.setAccelerationY(100);
+
         this.sprites.add(sprite);
 
         // Add colliders to both sprite and clouds
@@ -58,6 +60,12 @@ class Play extends Phaser.Scene {
             callbackScope: this,
             loop: true
         }) 
+        updateScore = this.time.addEvent({
+            delay: 1000,
+            callback: this.updateScoreText,
+            callbackScope: this,
+            loop: true
+        }) 
 
         let playConfig = {
             fontFamily: 'Courier',
@@ -77,7 +85,7 @@ class Play extends Phaser.Scene {
         this.gameOver = false;
 
         // Score text
-        this.Score = this.add.text(borderUISize + borderPadding*45, borderUISize + borderPadding*2, 'Score: ' + game.settings.cloudSpeed, playConfig).setOrigin(0.5);
+        this.Score = this.add.text(borderUISize + borderPadding*45, borderUISize + borderPadding*2, 'Score: ' + 0, playConfig).setOrigin(0.5);
 
         // Define keys that are used
         //   SPACE: Used for Jump (Outdated)
@@ -95,17 +103,17 @@ class Play extends Phaser.Scene {
     update() {
 
         this.sky.tilePositionX -= 3;
-        
         this.checkGameOver(this.player);
 
-        this.elapsed = timedEvent.getElapsedSeconds();
 
+        this.elapsed = timedEvent.getElapsedSeconds();
         if (this.gameOver) {
+            this.time.removeEvent(updateScore);
             this.displayEnd();
         }
         if (this.gameOver && Phaser.Input.Keyboard.JustDown(keyR)) {
-            this.time.now = 0;
             game.settings.cloudSpeed = game.settings.cloudSpeedOrig;
+            game.settings.score = 0;
             this.scene.restart();
         }
         if(this.gameOver && Phaser.Input.Keyboard.JustDown(keyLEFT)) {
@@ -122,10 +130,13 @@ class Play extends Phaser.Scene {
     }
 
     onEvent() {
-        game.settings.cloudSpeed += 0.25; 
+        game.settings.cloudSpeed += 0.25;
+        this.obstacleSpawner();
+    }
 
-        this.Score.text = "Score: " + Math.floor(game.settings.cloudSpeed * 0.5); 
-        
+    updateScoreText() {
+        game.settings.score += 1;
+        this.Score.text = "Score: " + game.settings.score*100;
     }
 
     checkGameOver(player) {
@@ -154,4 +165,13 @@ class Play extends Phaser.Scene {
         this.add.text(game.config.width/2, game.config.height/2, 'GAME OVER', playConfig).setOrigin(0.5);
         this.add.text(game.config.width/2, game.config.height/2 + 64, 'Press (R) to Restart or ← to Menu', playConfig).setOrigin(0.5);
     }
+
+    obstacleSpawner() {
+        let texture = this.textures.get('obstacle').getSourceImage();
+        const _obstacle = this.physics.add.sprite(Phaser.Math.Between(texture.width, game.config.width - texture.width), 0, 'obstacle');
+        this.physics.add.collider(_obstacle);
+        _obstacle.body.setAllowGravity(true);
+        this.obstacle = new Obstacle(this, 0, 0, 'obstacle', 0, _obstacle).setOrigin(0,0);
+    }
+
 }

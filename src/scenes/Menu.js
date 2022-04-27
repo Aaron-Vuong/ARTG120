@@ -43,7 +43,8 @@ class Menu extends Phaser.Scene {
 
             game.settings = {
                 cloudSpeed: 3,
-                cloudSpeedOrig: 3
+                cloudSpeedOrig: 3,
+                score: 0
             }
             this.scene.start('playScene');
         }
