@@ -102,7 +102,8 @@ class Play extends Phaser.Scene {
 
     update() {
 
-        this.sky.tilePositionX -= 3;
+        this.sky.tilePositionX += 3;
+        
         this.checkGameOver(this.player);
 
 
