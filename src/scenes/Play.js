@@ -182,7 +182,7 @@ class Play extends Phaser.Scene {
         this.add.text(game.config.width/2, game.config.height/2 + 64, 'Press (R) to Restart or (M) to Menu', playConfig).setOrigin(0.5);
     }
 
-    obstacleSpawner(filename, value) {
+    obstacleSpawner(filename) {
         let texture = this.textures.get(filename).getSourceImage();
         const _obstacle = this.physics.add.sprite(Phaser.Math.Between(texture.width, game.config.width - texture.width), 0, filename);
         this.physics.add.collider(_obstacle);
