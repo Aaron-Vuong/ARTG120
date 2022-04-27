@@ -7,10 +7,12 @@ class Play extends Phaser.Scene {
         this.load.image('sky', './assets/sky.png');
         this.load.image('player', './assets/Bunny.png');
         this.load.image('cloud', './assets/cloud.png');
-        this.load.image('obstacle', './assets/player.png');
+        this.load.image('cat', './assets/Cat.png');
+        this.load.image('pug', './assets/Pug.png')
     }
 
     create() {
+        let value = 10;
         this.sky = this.add.tileSprite(0, 0, 640, 480, 'sky').setOrigin(0,0);
         // Create clouds and set attributes
         this.clouds = this.add.group({
@@ -53,6 +55,8 @@ class Play extends Phaser.Scene {
         this.cloud3 = new Cloud(this, game.config.width, borderUISize*9 + borderPadding*6, 'cloud', 0, _cloud3).setOrigin(0,0);
         this.cloud4 = new Cloud(this, game.config.width + borderUISize*20, borderUISize*9 + borderPadding*4, 'cloud', 0, _cloud4).setOrigin(0,0);
 
+        this.obstacles = this.physics.add.group();
+
         //timer
         timedEvent = this.time.addEvent({
             delay: 500,
@@ -66,6 +70,12 @@ class Play extends Phaser.Scene {
             callbackScope: this,
             loop: true
         }) 
+        catGeneration = this.time.addEvent({
+            delay: 2000,
+            callback: this.onCatGen,
+            callbackScope: this,
+            loop: true
+        })
 
         let playConfig = {
             fontFamily: 'Courier',
@@ -89,15 +99,17 @@ class Play extends Phaser.Scene {
 
         // Define keys that are used
         //   SPACE: Used for Jump (Outdated)
-        //   LEFT/A: Used to go left or to go to Menu at GameOver
+        //   LEFT/A: Used to go left
         //   RIGHT/D: Used to go right
         //   R: Used to restart play scene
+        //   M: Go to Menu at GameOver
         keySPACE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
         keyLEFT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
         keyRIGHT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
         keyR = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R);
         keyA = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
         keyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
+        keyM = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.M);
     }
 
     update() {
@@ -117,7 +129,7 @@ class Play extends Phaser.Scene {
             game.settings.score = 0;
             this.scene.restart();
         }
-        if(this.gameOver && Phaser.Input.Keyboard.JustDown(keyLEFT)) {
+        if(this.gameOver && Phaser.Input.Keyboard.JustDown(keyM)) {
             this.scene.start("menuScene");
         }
         if (!this.gameOver) {
@@ -132,12 +144,15 @@ class Play extends Phaser.Scene {
 
     onEvent() {
         game.settings.cloudSpeed += 0.25;
-        this.obstacleSpawner();
     }
 
     updateScoreText() {
         game.settings.score += 1;
         this.Score.text = "Score: " + game.settings.score*100;
+    }
+
+    onCatGen() {
+        this.obstacleSpawner('cat');
     }
 
     checkGameOver(player) {
@@ -164,15 +179,25 @@ class Play extends Phaser.Scene {
         timedEvent.remove();
         
         this.add.text(game.config.width/2, game.config.height/2, 'GAME OVER', playConfig).setOrigin(0.5);
-        this.add.text(game.config.width/2, game.config.height/2 + 64, 'Press (R) to Restart or ← to Menu', playConfig).setOrigin(0.5);
+        this.add.text(game.config.width/2, game.config.height/2 + 64, 'Press (R) to Restart or (M) to Menu', playConfig).setOrigin(0.5);
     }
 
-    obstacleSpawner() {
-        let texture = this.textures.get('obstacle').getSourceImage();
-        const _obstacle = this.physics.add.sprite(Phaser.Math.Between(texture.width, game.config.width - texture.width), 0, 'obstacle');
+    obstacleSpawner(filename, value) {
+        let texture = this.textures.get(filename).getSourceImage();
+        const _obstacle = this.physics.add.sprite(Phaser.Math.Between(texture.width, game.config.width - texture.width), 0, filename);
         this.physics.add.collider(_obstacle);
+        _obstacle.body.setAngularVelocity(Phaser.Math.Between(-200, 200));
         _obstacle.body.setAllowGravity(true);
-        this.obstacle = new Obstacle(this, 0, 0, 'obstacle', 0, _obstacle).setOrigin(0,0);
+//        this.obstacle = new Obstacle(this, 0, 0, filename, 0, _obstacle).setOrigin(0,0);
+
+        this.obstacles.add(_obstacle);
+        this.physics.add.overlap(this.player.sprite, this.obstacles, this.hitObstacle, null, this);
+        
     }
 
+    hitObstacle (player, obstacle) {
+        game.settings.score += 2;
+        this.Score.text = "Score: " + game.settings.score*100;
+        obstacle.destroy();
+    }
 }
