@@ -122,6 +122,8 @@ class Play extends Phaser.Scene {
         this.elapsed = timedEvent.getElapsedSeconds();
         if (this.gameOver) {
             this.time.removeEvent(updateScore);
+            this.time.removeEvent(catGeneration);
+            this.time.removeEvent(timedEvent);
             this.displayEnd();
         }
         if (this.gameOver && Phaser.Input.Keyboard.JustDown(keyR)) {
