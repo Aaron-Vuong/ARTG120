@@ -155,6 +155,7 @@ class Play extends Phaser.Scene {
 
     onCatGen() {
         this.obstacleSpawner('cat');
+        this.obstacleSpawner('pug');
     }
 
     checkGameOver(player) {
