@@ -4,7 +4,7 @@ class Play extends Phaser.Scene {
     }
 
     preload() {
-        this.load.image('sky', './assets/sky.png');
+        this.load.image('sky', './assets/background.png');
         this.load.image('player', './assets/Bunny.png');
         this.load.image('cloud', './assets/cloud.png');
         this.load.image('cat', './assets/Cat.png');
