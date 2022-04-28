@@ -8,7 +8,8 @@ class Play extends Phaser.Scene {
         this.load.image('player', './assets/Bunny.png');
         this.load.image('cloud', './assets/cloud.png');
         this.load.image('cat', './assets/Cat.png');
-        this.load.image('pug', './assets/Pug.png')
+        this.load.image('pug', './assets/Pug.png');
+        this.load.image('coin', './assets/coin.png');
     }
 
     create() {
@@ -156,6 +157,7 @@ class Play extends Phaser.Scene {
     onCatGen() {
         this.obstacleSpawner('cat');
         this.obstacleSpawner('pug');
+        this.obstacleSpawner('coin');
     }
 
     checkGameOver(player) {

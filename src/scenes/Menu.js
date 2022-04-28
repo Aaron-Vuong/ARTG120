@@ -27,7 +27,8 @@ class Menu extends Phaser.Scene {
         //menu text
         this.add.text(game.config.width/2, game.config.height/2 - borderUISize - borderPadding, "Sky Box", menuConfig).setOrigin(0.5);
         this.add.text(game.config.width/2, game.config.height/2, "Press Space to Play", menuConfig).setOrigin(0.5);
-        this.add.text(game.config.width/2, game.config.height/2 + 45, "Use <--> to Move", menuConfig).setOrigin(0.5);
+        this.add.text(game.config.width/2, game.config.height/2 + 45, "Catch the animals to gain points!", menuConfig).setOrigin(0.5);
+        this.add.text(game.config.width/2, game.config.height/2 + 90, "Use <--> to Move", menuConfig).setOrigin(0.5);
         
         //define keys
         keySPACE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
