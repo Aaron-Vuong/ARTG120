@@ -12,13 +12,9 @@ class Play extends Phaser.Scene {
         this.load.image('coin', './assets/coin.png');
         this.load.image('spark', './assets/spark.png');
         this.load.spritesheet('bounce_anim', './assets/bounce_anim.png', {frameWidth: 100, frameHeight: 100, startFrame: 0, endFrame: 5});
-    }
-
-    create() {
         this.load.audio('music', './assets/bgMusic.wav');
         this.load.spritesheet('Bun', './assets/BunSpritesheet.png', {frameWidth: 1200, frameHeight: 900, startFrame: 0, endFrame: 14});
     }
-
     create() {
         this.anims.create({
             key: 'Bunny',
@@ -27,13 +23,12 @@ class Play extends Phaser.Scene {
             repeat: -1
         });
 
-        let value = 10;
         this.sky = this.add.tileSprite(0, 0, 640, 480, 'sky').setOrigin(0,0);
-        this.anims.create({
-            key: 'bounce',
-            frames: this.anims.generateFrameNumbers('bounce_anim', { start: 0, end: 5, first: 0}),
-            frameRate: 15
-        });
+        // this.anims.create({
+        //     key: 'bounce',
+        //     frames: this.anims.generateFrameNumbers('bounce_anim', { start: 0, end: 5, first: 0}),
+        //     frameRate: 15
+        // });
         // particles
         this.particles = this.add.particles('cloud');
         this.emitter = this.particles.createEmitter({
@@ -76,7 +71,7 @@ class Play extends Phaser.Scene {
 
         // Create sprite and set attributes
         this.sprites = this.add.group();
-        const sprite = this.physics.add.sprite(game.config.width/2, game.config.height/2 - borderUISize*4 - borderPadding*2, 'Bunny').setOrigin(0.5,0.5);
+        const sprite = this.physics.add.sprite(game.config.width/2, game.config.height/2 - borderUISize*4 - borderPadding*2, 'player').setOrigin(0.5,0.5);
         sprite.setBounce(1, 1);
         // sprite.body.setAllowGravity(false);
         // sprite.body.setAccelerationY(100);
@@ -87,7 +82,7 @@ class Play extends Phaser.Scene {
         this.physics.add.collider(this.sprites, this.clouds);
 
         // Create the player with the reference to player sprite
-        this.player = new Player(this, game.config.width/2, game.config.height/2 - borderUISize - borderPadding, 'Bunny', 0, sprite).setOrigin(0.5, 0.5);
+        this.player = new Player(this, game.config.width/2, game.config.height/2 - borderUISize - borderPadding, 'player', 0, sprite).setOrigin(0.5, 0.5);
         //this.player.play('Bunny');
         this.player.scale = 0.08;
         sprite.scale = 0.08;
@@ -230,7 +225,7 @@ class Play extends Phaser.Scene {
         this.obstacleSpawner('pug');
     }
     onCoinGen() {
-        this.obstacleSpawner('coin');
+        this.goodobstacleSpawner('coin');
     }
 
     checkGameOver(player) {
@@ -273,12 +268,35 @@ class Play extends Phaser.Scene {
         
     }
 
+    
+
     hitObstacle (player, obstacle) {
         this.sparks.emitParticleAt(obstacle.x, obstacle.y, 10);
         game.settings.score -= 2;
         this.Score.text = "Score: " + game.settings.score*100;
         obstacle.destroy();
     }
+
+    goodobstacleSpawner(filename) {
+        let texture = this.textures.get(filename).getSourceImage();
+        const _obstacle = this.physics.add.sprite(Phaser.Math.Between(texture.width, game.config.width - texture.width), 0, filename);
+        this.physics.add.collider(_obstacle);
+        _obstacle.body.setAngularVelocity(Phaser.Math.Between(-200, 200));
+        _obstacle.body.setAllowGravity(true);
+        this.obstacle = new Obstacle(this, 0, 0, filename, 0, _obstacle).setOrigin(0,0);
+
+        this.obstacles.add(_obstacle);
+        this.physics.add.overlap(this.player.sprite, this.obstacles, this.goodhitObstacle, null, this);
+        
+    }
+
+    goodhitObstacle (player, obstacle) {
+        this.sparks.emitParticleAt(obstacle.x, obstacle.y, 10);
+        game.settings.score += 2;
+        this.Score.text = "Score: " + game.settings.score*100;
+        obstacle.destroy();
+    }
+
     bounceHandler(sprite) {
         this.bounce.setX( sprite.x - 100/2);
         this.bounce.setY( sprite.y - 100/2);
