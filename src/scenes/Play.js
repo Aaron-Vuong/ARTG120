@@ -10,6 +10,7 @@ class Play extends Phaser.Scene {
         this.load.image('cat', './assets/Cat.png');
         this.load.image('pug', './assets/Pug.png');
         this.load.image('coin', './assets/coin.png');
+        this.load.audio('music', './assets/bgMusic.wav');
     }
 
     create() {
@@ -111,6 +112,12 @@ class Play extends Phaser.Scene {
         keyA = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
         keyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
         keyM = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.M);
+
+        //play background music
+        this.song = this.sound.add('music');
+        this.song.setLoop(true);
+        this.song.volume = 0.5;
+        this.song.play();
     }
 
     update() {
@@ -125,11 +132,13 @@ class Play extends Phaser.Scene {
             this.time.removeEvent(updateScore);
             this.time.removeEvent(catGeneration);
             this.time.removeEvent(timedEvent);
+            this.song.stop();
             this.displayEnd();
         }
         if (this.gameOver && Phaser.Input.Keyboard.JustDown(keyR)) {
             game.settings.cloudSpeed = game.settings.cloudSpeedOrig;
             game.settings.score = 0;
+            this.song.stop();
             this.scene.restart();
         }
         if(this.gameOver && Phaser.Input.Keyboard.JustDown(keyM)) {
