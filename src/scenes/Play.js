@@ -5,7 +5,7 @@ class Play extends Phaser.Scene {
 
     preload() {
         this.load.image('sky', './assets/background.png');
-        this.load.image('player', './assets/other_bunny.png');
+        this.load.image('player', './assets/Bunny.png');
         this.load.image('cloud', './assets/cloud.png');
         this.load.image('cat', './assets/Cat.png');
         this.load.image('pug', './assets/Pug.png');
@@ -284,7 +284,7 @@ class Play extends Phaser.Scene {
         this.bounce.setY( sprite.y - 100/2);
         if (sprite.body.touching.down) {
             this.bounce.alpha = 1;
-            this.bounce.anims.play('bounce');
+            this.bounce.anims.play('Bunny');
             // this.bounce.on('animationcomplete', () => {
             //     sprite.scaleY = 1;
             // });
