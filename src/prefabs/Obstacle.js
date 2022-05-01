@@ -45,16 +45,19 @@ class Obstacle extends Phaser.GameObjects.Sprite {
 
     hitObstacle (player, obstacle) {
         if (obstacle.texture.key == 'pug') {
+            this.spark_emitter.blendMode = 'MULTIPLY';
             this.sparks.emitParticleAt(this.sprite.x, this.sprite.y, 10);
             game.settings.score -= 200;
             this.scene.sound.play('DogBark');
         }
         else if (obstacle.texture.key == 'cat') {
+            this.spark_emitter.blendMode = 'MULTIPLY';
             this.sparks.emitParticleAt(this.sprite.x, this.sprite.y, 10);
             game.settings.score -= 200;
             this.scene.sound.play('CatMeow');
         }
         else if (obstacle.texture.key == 'coin') {
+            this.spark_emitter.blendMode = 'SCREEN';
             this.sparks.emitParticleAt(this.sprite.x, this.sprite.y, 10);
             game.settings.score += 200;
             this.scene.fiveCoinAchiv += 1;
