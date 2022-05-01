@@ -15,6 +15,19 @@ class Play extends Phaser.Scene {
     }
 
     create() {
+        this.load.audio('music', './assets/bgMusic.wav');
+        this.load.spritesheet('Bun', './assets/BunSpritesheet.png', {frameWidth: 1200, frameHeight: 900, startFrame: 0, endFrame: 14});
+    }
+
+    create() {
+        this.anims.create({
+            key: 'Bunny',
+            frames: this.anims.generateFrameNumbers('Bun', {start: 0, end: 14, first: 0}),
+            frameRate: 30,
+            repeat: -1
+        });
+
+        let value = 10;
         this.sky = this.add.tileSprite(0, 0, 640, 480, 'sky').setOrigin(0,0);
         this.anims.create({
             key: 'bounce',
@@ -63,7 +76,7 @@ class Play extends Phaser.Scene {
 
         // Create sprite and set attributes
         this.sprites = this.add.group();
-        const sprite = this.physics.add.sprite(game.config.width/2, game.config.height/2 - borderUISize*4 - borderPadding*2, 'player').setOrigin(0.5,0.5);
+        const sprite = this.physics.add.sprite(game.config.width/2, game.config.height/2 - borderUISize*4 - borderPadding*2, 'Bunny').setOrigin(0.5,0.5);
         sprite.setBounce(1, 1);
         // sprite.body.setAllowGravity(false);
         // sprite.body.setAccelerationY(100);
@@ -74,9 +87,11 @@ class Play extends Phaser.Scene {
         this.physics.add.collider(this.sprites, this.clouds);
 
         // Create the player with the reference to player sprite
-        this.player = new Player(this, game.config.width/2, game.config.height/2 - borderUISize - borderPadding, 'player', 0, sprite, 'bounce_anim').setOrigin(0.5, 0.5);
-        // this.player.scale = 0.1;
-        // sprite.scale = 0.1;
+        this.player = new Player(this, game.config.width/2, game.config.height/2 - borderUISize - borderPadding, 'Bunny', 0, sprite).setOrigin(0.5, 0.5);
+        //this.player.play('Bunny');
+        this.player.scale = 0.08;
+        sprite.scale = 0.08;
+       
 
         // add cloud platforms
         this.cloud1 = new Cloud(this, game.config.width + borderUISize*14, borderUISize*8, 'cloud', 0, _cloud1, this.particles).setOrigin(0,0);
@@ -153,6 +168,12 @@ class Play extends Phaser.Scene {
         keyA = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
         keyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
         keyM = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.M);
+
+        //play background music
+        this.song = this.sound.add('music');
+        this.song.setLoop(true);
+        this.song.volume = 0.3;
+        this.song.play();
     }
 
     update() {
@@ -169,11 +190,13 @@ class Play extends Phaser.Scene {
             this.time.removeEvent(dogGeneration);
             this.time.removeEvent(coinGeneration);
             this.time.removeEvent(timedEvent);
+            this.song.stop();
             this.displayEnd();
         }
         if (this.gameOver && Phaser.Input.Keyboard.JustDown(keyR)) {
             game.settings.cloudSpeed = game.settings.cloudSpeedOrig;
             game.settings.score = 0;
+            this.song.stop();
             this.scene.restart();
         }
         if(this.gameOver && Phaser.Input.Keyboard.JustDown(keyM)) {
@@ -252,7 +275,7 @@ class Play extends Phaser.Scene {
 
     hitObstacle (player, obstacle) {
         this.sparks.emitParticleAt(obstacle.x, obstacle.y, 10);
-        game.settings.score += 2;
+        game.settings.score -= 2;
         this.Score.text = "Score: " + game.settings.score*100;
         obstacle.destroy();
     }
