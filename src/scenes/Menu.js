@@ -5,6 +5,11 @@ class Menu extends Phaser.Scene {
 
     preload() {
         this.load.image('sky', './assets/background.png');
+        this.load.audio('CatMeow', './assets/CatMeow.mp3');
+        this.load.audio('CoinSound', './assets/CoinSound.mp3');
+        this.load.audio('DogBark', './assets/DogBark.mp3');
+        this.load.audio('StartSound1', './assets/StartSound1.mp3');
+        this.load.audio('StartSound2', './assets/StartSound2.mp3');
     }
 
     create() {
@@ -47,6 +52,7 @@ class Menu extends Phaser.Scene {
                 cloudSpeedOrig: 3,
                 score: 0
             }
+            this.sound.play('StartSound1');
             this.scene.start('playScene');
         }
     }
