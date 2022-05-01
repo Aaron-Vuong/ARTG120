@@ -6,8 +6,7 @@ let config = {
         default: 'arcade',
         arcade: {
             gravity: {y: 300},
-            
-            debug: true
+            // debug: true
         }
     },
     scene: [Menu, Play] 
@@ -23,4 +22,4 @@ let borderPadding = borderUISize / 3;
 let keyLEFT, keyRIGHT, keySPACE, keyR, keyA, keyD, keyM;
 
 //timer variable
-let timedEvent, updateScore, catGeneration;
+let timedEvent, updateScore, catGeneration, dogGeneration, coinGeneration;

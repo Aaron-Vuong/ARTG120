@@ -5,16 +5,44 @@ class Play extends Phaser.Scene {
 
     preload() {
         this.load.image('sky', './assets/background.png');
-        this.load.image('player', './assets/Bunny.png');
+        this.load.image('player', './assets/other_bunny.png');
         this.load.image('cloud', './assets/cloud.png');
         this.load.image('cat', './assets/Cat.png');
         this.load.image('pug', './assets/Pug.png');
         this.load.image('coin', './assets/coin.png');
+        this.load.image('spark', './assets/spark.png');
+        this.load.spritesheet('bounce_anim', './assets/bounce_anim.png', {frameWidth: 100, frameHeight: 100, startFrame: 0, endFrame: 5});
     }
 
     create() {
-        let value = 10;
         this.sky = this.add.tileSprite(0, 0, 640, 480, 'sky').setOrigin(0,0);
+        this.anims.create({
+            key: 'bounce',
+            frames: this.anims.generateFrameNumbers('bounce_anim', { start: 0, end: 5, first: 0}),
+            frameRate: 15
+        });
+        // particles
+        this.particles = this.add.particles('cloud');
+        this.emitter = this.particles.createEmitter({
+            x: 400,
+            y: 300,
+            speed: 200,
+            lifespan: 500,
+            blendMode: 'ADD',
+            scale: {start: 0.5, end: 0},
+            on: false
+        });
+        this.sparks = this.add.particles('spark');
+        this.spark_emitter = this.sparks.createEmitter({
+            x: 400,
+            y: 300,
+            speed: 200,
+            lifespan: 500,
+            blendMode: 'SCREEN',
+            scale: {start: 0.5, end: 0},
+            on: false
+        });
+
         // Create clouds and set attributes
         this.clouds = this.add.group({
             immovable: true,
@@ -35,29 +63,31 @@ class Play extends Phaser.Scene {
 
         // Create sprite and set attributes
         this.sprites = this.add.group();
-        const sprite = this.physics.add.sprite(game.config.width/2, game.config.height/2 - borderUISize*4 - borderPadding*2, 'player');
+        const sprite = this.physics.add.sprite(game.config.width/2, game.config.height/2 - borderUISize*4 - borderPadding*2, 'player').setOrigin(0.5,0.5);
         sprite.setBounce(1, 1);
         // sprite.body.setAllowGravity(false);
         // sprite.body.setAccelerationY(100);
-
+        
         this.sprites.add(sprite);
 
         // Add colliders to both sprite and clouds
         this.physics.add.collider(this.sprites, this.clouds);
 
         // Create the player with the reference to player sprite
-        this.player = new Player(this, game.config.width/2, game.config.height/2 - borderUISize - borderPadding, 'player', 0, sprite).setOrigin(0.5, 0);
-        this.player.scale = 0.1;
-        sprite.scale = 0.1;
+        this.player = new Player(this, game.config.width/2, game.config.height/2 - borderUISize - borderPadding, 'player', 0, sprite, 'bounce_anim').setOrigin(0.5, 0.5);
+        // this.player.scale = 0.1;
+        // sprite.scale = 0.1;
 
         // add cloud platforms
-        this.cloud1 = new Cloud(this, game.config.width + borderUISize*14, borderUISize*8, 'cloud', 0, _cloud1).setOrigin(0,0);
-        this.cloud2 = new Cloud(this, game.config.width + borderUISize*6, borderUISize*7 + borderPadding*4, 'cloud', 0, _cloud2).setOrigin(0,0);
-        this.cloud3 = new Cloud(this, game.config.width, borderUISize*9 + borderPadding*6, 'cloud', 0, _cloud3).setOrigin(0,0);
-        this.cloud4 = new Cloud(this, game.config.width + borderUISize*20, borderUISize*9 + borderPadding*4, 'cloud', 0, _cloud4).setOrigin(0,0);
+        this.cloud1 = new Cloud(this, game.config.width + borderUISize*14, borderUISize*8, 'cloud', 0, _cloud1, this.particles).setOrigin(0,0);
+        this.cloud2 = new Cloud(this, game.config.width + borderUISize*6, borderUISize*7 + borderPadding*4, 'cloud', 0, _cloud2, this.particles).setOrigin(0,0);
+        this.cloud3 = new Cloud(this, game.config.width, borderUISize*9 + borderPadding*6, 'cloud', 0, _cloud3, this.particles).setOrigin(0,0);
+        this.cloud4 = new Cloud(this, game.config.width + borderUISize*20, borderUISize*9 + borderPadding*4, 'cloud', 0, _cloud4, this.particles).setOrigin(0,0);
 
         this.obstacles = this.physics.add.group();
-
+        
+        this.bounce = this.add.sprite(sprite.x, sprite.y, 'bounce_spritesheet').setOrigin(0, 0);
+        this.bounce.alpha = 0;
         //timer
         timedEvent = this.time.addEvent({
             delay: 500,
@@ -74,6 +104,18 @@ class Play extends Phaser.Scene {
         catGeneration = this.time.addEvent({
             delay: 2000,
             callback: this.onCatGen,
+            callbackScope: this,
+            loop: true
+        })
+        dogGeneration = this.time.addEvent({
+            delay: 2500,
+            callback: this.onDogGen,
+            callbackScope: this,
+            loop: true
+        })
+        coinGeneration = this.time.addEvent({
+            delay: 3100,
+            callback: this.onCoinGen,
             callbackScope: this,
             loop: true
         })
@@ -124,6 +166,8 @@ class Play extends Phaser.Scene {
         if (this.gameOver) {
             this.time.removeEvent(updateScore);
             this.time.removeEvent(catGeneration);
+            this.time.removeEvent(dogGeneration);
+            this.time.removeEvent(coinGeneration);
             this.time.removeEvent(timedEvent);
             this.displayEnd();
         }
@@ -137,6 +181,8 @@ class Play extends Phaser.Scene {
         }
         if (!this.gameOver) {
             this.player.update();
+            
+            this.bounceHandler(this.player.sprite);
             this.cloud1.update();
             this.cloud2.update();
             this.cloud3.update();
@@ -146,7 +192,7 @@ class Play extends Phaser.Scene {
     }
 
     onEvent() {
-        game.settings.cloudSpeed += 0.25;
+        game.settings.cloudSpeed += 0.1;
     }
 
     updateScoreText() {
@@ -156,7 +202,11 @@ class Play extends Phaser.Scene {
 
     onCatGen() {
         this.obstacleSpawner('cat');
+    }
+    onDogGen() {
         this.obstacleSpawner('pug');
+    }
+    onCoinGen() {
         this.obstacleSpawner('coin');
     }
 
@@ -193,7 +243,7 @@ class Play extends Phaser.Scene {
         this.physics.add.collider(_obstacle);
         _obstacle.body.setAngularVelocity(Phaser.Math.Between(-200, 200));
         _obstacle.body.setAllowGravity(true);
-//        this.obstacle = new Obstacle(this, 0, 0, filename, 0, _obstacle).setOrigin(0,0);
+        this.obstacle = new Obstacle(this, 0, 0, filename, 0, _obstacle).setOrigin(0,0);
 
         this.obstacles.add(_obstacle);
         this.physics.add.overlap(this.player.sprite, this.obstacles, this.hitObstacle, null, this);
@@ -201,8 +251,20 @@ class Play extends Phaser.Scene {
     }
 
     hitObstacle (player, obstacle) {
+        this.sparks.emitParticleAt(obstacle.x, obstacle.y, 10);
         game.settings.score += 2;
         this.Score.text = "Score: " + game.settings.score*100;
         obstacle.destroy();
+    }
+    bounceHandler(sprite) {
+        this.bounce.setX( sprite.x - 100/2);
+        this.bounce.setY( sprite.y - 100/2);
+        if (sprite.body.touching.down) {
+            this.bounce.alpha = 1;
+            this.bounce.anims.play('bounce');
+            // this.bounce.on('animationcomplete', () => {
+            //     sprite.scaleY = 1;
+            // });
+        }
     }
 }
