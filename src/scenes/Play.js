@@ -11,6 +11,7 @@ class Play extends Phaser.Scene {
         this.load.image('pug', './assets/Pug.png');
         this.load.image('coin', './assets/coin.png');
         this.load.image('spark', './assets/spark.png');
+        this.load.image('other_bunny', './assets/other_bunny.png')
         this.load.spritesheet('bounce_anim', './assets/bounce_anim.png', {frameWidth: 100, frameHeight: 100, startFrame: 0, endFrame: 5});
         this.load.audio('music', './assets/bgMusic.wav');
         this.load.spritesheet('Bun', './assets/BunSpritesheet.png', {frameWidth: 1200, frameHeight: 900, startFrame: 0, endFrame: 14});
@@ -24,11 +25,11 @@ class Play extends Phaser.Scene {
         });
 
         this.sky = this.add.tileSprite(0, 0, 640, 480, 'sky').setOrigin(0,0);
-        // this.anims.create({
-        //     key: 'bounce',
-        //     frames: this.anims.generateFrameNumbers('bounce_anim', { start: 0, end: 5, first: 0}),
-        //     frameRate: 15
-        // });
+        this.anims.create({
+            key: 'bounce',
+            frames: this.anims.generateFrameNumbers('bounce_anim', { start: 0, end: 5, first: 0}),
+            frameRate: 8
+        });
         // particles
         this.particles = this.add.particles('cloud');
         this.emitter = this.particles.createEmitter({
@@ -47,6 +48,16 @@ class Play extends Phaser.Scene {
             speed: 200,
             lifespan: 500,
             blendMode: 'SCREEN',
+            scale: {start: 0.5, end: 0},
+            on: false
+        });
+        this.badsparks = this.add.particles('spark');
+        this.badspark_emitter = this.badsparks.createEmitter({
+            x: 400,
+            y: 300,
+            speed: 200,
+            lifespan: 500,
+            blendMode: 'MULTIPLY',
             scale: {start: 0.5, end: 0},
             on: false
         });
@@ -71,7 +82,7 @@ class Play extends Phaser.Scene {
 
         // Create sprite and set attributes
         this.sprites = this.add.group();
-        const sprite = this.physics.add.sprite(game.config.width/2, game.config.height/2 - borderUISize*4 - borderPadding*2, 'player').setOrigin(0.5,0.5);
+        const sprite = this.physics.add.sprite(game.config.width/2, game.config.height/2 - borderUISize*4 - borderPadding*2, 'other_bunny').setOrigin(0.5,0.5);
         sprite.setBounce(1, 1);
         // sprite.body.setAllowGravity(false);
         // sprite.body.setAccelerationY(100);
@@ -82,11 +93,11 @@ class Play extends Phaser.Scene {
         this.physics.add.collider(this.sprites, this.clouds);
 
         // Create the player with the reference to player sprite
-        this.player = new Player(this, game.config.width/2, game.config.height/2 - borderUISize - borderPadding, 'player', 0, sprite).setOrigin(0.5, 0.5);
+        this.player = new Player(this, game.config.width/2, game.config.height/2 - borderUISize - borderPadding, 'other_bunny', 0, sprite).setOrigin(0.5, 0.5);
         //this.player.play('Bunny');
-        this.player.scale = 0.08;
-        sprite.scale = 0.08;
-       
+        // this.player.scale = 0.08;
+        // sprite.scale = 0.08;
+        sprite.alpha = 0;
 
         // add cloud platforms
         this.cloud1 = new Cloud(this, game.config.width + borderUISize*14, borderUISize*8, 'cloud', 0, _cloud1, this.particles).setOrigin(0,0);
@@ -95,9 +106,10 @@ class Play extends Phaser.Scene {
         this.cloud4 = new Cloud(this, game.config.width + borderUISize*20, borderUISize*9 + borderPadding*4, 'cloud', 0, _cloud4, this.particles).setOrigin(0,0);
 
         this.obstacles = this.physics.add.group();
+        this.goodobstacles = this.physics.add.group();
         
-        this.bounce = this.add.sprite(sprite.x, sprite.y, 'bounce_spritesheet').setOrigin(0, 0);
-        this.bounce.alpha = 0;
+        this.bounce = this.add.sprite(sprite.x, sprite.y, 'bounce_anim').setOrigin(0, 0);
+        // this.bounce.scale = 0.1;
         //timer
         timedEvent = this.time.addEvent({
             delay: 500,
@@ -271,7 +283,7 @@ class Play extends Phaser.Scene {
     
 
     hitObstacle (player, obstacle) {
-        this.sparks.emitParticleAt(obstacle.x, obstacle.y, 10);
+        this.badsparks.emitParticleAt(obstacle.x, obstacle.y, 10);
         game.settings.score -= 2;
         this.Score.text = "Score: " + game.settings.score*100;
         obstacle.destroy();
@@ -285,8 +297,8 @@ class Play extends Phaser.Scene {
         _obstacle.body.setAllowGravity(true);
         this.obstacle = new Obstacle(this, 0, 0, filename, 0, _obstacle).setOrigin(0,0);
 
-        this.obstacles.add(_obstacle);
-        this.physics.add.overlap(this.player.sprite, this.obstacles, this.goodhitObstacle, null, this);
+        this.goodobstacles.add(_obstacle);
+        this.physics.add.overlap(this.player.sprite, this.goodobstacles, this.goodhitObstacle, null, this);
         
     }
 
@@ -301,11 +313,14 @@ class Play extends Phaser.Scene {
         this.bounce.setX( sprite.x - 100/2);
         this.bounce.setY( sprite.y - 100/2);
         if (sprite.body.touching.down) {
-            this.bounce.alpha = 1;
-            this.bounce.anims.play('Bunny');
-            // this.bounce.on('animationcomplete', () => {
-            //     sprite.scaleY = 1;
-            // });
+            sprite.alpha = 0;
+            
+            this.bounce.anims.play('bounce');
         }
+        
+        this.bounce.on('animationcomplete', function(){
+            this.bounce.setTexture('other_bunny', 0);
+
+        }, this);
     }
 }
