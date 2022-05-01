@@ -5,6 +5,7 @@ class Menu extends Phaser.Scene {
 
     preload() {
         this.load.image('sky', './assets/background.png');
+        // Audio clips/SFX are loaded here.
         this.load.audio('CatMeow', './assets/CatMeow.mp3');
         this.load.audio('CoinSound', './assets/CoinSound.mp3');
         this.load.audio('DogBark', './assets/DogBark.mp3');
