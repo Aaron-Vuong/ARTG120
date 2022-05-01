@@ -48,8 +48,8 @@ class Play extends Phaser.Scene {
 
         // Create the player with the reference to player sprite
         this.player = new Player(this, game.config.width/2, game.config.height/2 - borderUISize - borderPadding, 'player', 0, sprite).setOrigin(0.5, 0);
-        this.player.scale = 0.1;
-        sprite.scale = 0.1;
+        this.player.scale = 0.08;
+        sprite.scale = 0.08;
 
         // add cloud platforms
         this.cloud1 = new Cloud(this, game.config.width + borderUISize*14, borderUISize*8, 'cloud', 0, _cloud1).setOrigin(0,0);
@@ -116,7 +116,7 @@ class Play extends Phaser.Scene {
         //play background music
         this.song = this.sound.add('music');
         this.song.setLoop(true);
-        this.song.volume = 0.5;
+        this.song.volume = 0.3;
         this.song.play();
     }
 
