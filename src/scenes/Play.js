@@ -11,9 +11,17 @@ class Play extends Phaser.Scene {
         this.load.image('pug', './assets/Pug.png');
         this.load.image('coin', './assets/coin.png');
         this.load.audio('music', './assets/bgMusic.wav');
+        this.load.spritesheet('Bun', './assets/BunSpritesheet.png', {frameWidth: 1200, frameHeight: 900, startFrame: 0, endFrame: 14});
     }
 
     create() {
+        this.anims.create({
+            key: 'Bunny',
+            frames: this.anims.generateFrameNumbers('Bun', {start: 0, end: 14, first: 0}),
+            frameRate: 30,
+            repeat: -1
+        });
+
         let value = 10;
         this.sky = this.add.tileSprite(0, 0, 640, 480, 'sky').setOrigin(0,0);
         // Create clouds and set attributes
@@ -36,7 +44,7 @@ class Play extends Phaser.Scene {
 
         // Create sprite and set attributes
         this.sprites = this.add.group();
-        const sprite = this.physics.add.sprite(game.config.width/2, game.config.height/2 - borderUISize*4 - borderPadding*2, 'player');
+        const sprite = this.physics.add.sprite(game.config.width/2, game.config.height/2 - borderUISize*4 - borderPadding*2, 'Bunny');
         sprite.setBounce(1, 1);
         // sprite.body.setAllowGravity(false);
         // sprite.body.setAccelerationY(100);
@@ -47,9 +55,11 @@ class Play extends Phaser.Scene {
         this.physics.add.collider(this.sprites, this.clouds);
 
         // Create the player with the reference to player sprite
-        this.player = new Player(this, game.config.width/2, game.config.height/2 - borderUISize - borderPadding, 'player', 0, sprite).setOrigin(0.5, 0);
+        this.player = new Player(this, game.config.width/2, game.config.height/2 - borderUISize - borderPadding, 'Bunny', 0, sprite).setOrigin(0.5, 0);
+        //this.player.play('Bunny');
         this.player.scale = 0.08;
         sprite.scale = 0.08;
+       
 
         // add cloud platforms
         this.cloud1 = new Cloud(this, game.config.width + borderUISize*14, borderUISize*8, 'cloud', 0, _cloud1).setOrigin(0,0);
