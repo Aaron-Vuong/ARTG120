@@ -11,6 +11,7 @@ class Play extends Phaser.Scene {
         this.load.image('pug', './assets/Pug.png');
         this.load.image('coin', './assets/coin.png');
         this.load.image('spark', './assets/spark.png');
+        this.load.image('5CoinAchiv', './assets/5CoinAchiv.png');
         this.load.audio('music', './assets/bgMusic.wav');
         this.load.spritesheet('Bun', './assets/BunSpritesheet.png', {frameWidth: 1200, frameHeight: 900, startFrame: 0, endFrame: 14});
     }
@@ -38,10 +39,26 @@ class Play extends Phaser.Scene {
         // Set scrolling background.
         this.sky = this.add.tileSprite(0, 0, 640, 480, 'sky').setOrigin(0,0);
 
-        // GAME OVER flag
+        // Flags
+        // ------------------------------------------------------
+        // gameOver : Used for indicating the end of the game.
+        // fiveCoinAchiv : Used for indicating the achievement "5CoinAchiv".
+        // fiveCoinCallOnce : Used to only show the achievement "5CoinAchiv" once.
         this.gameOver = false;
-        // Score text
+        this.fiveCoinAchiv = 0;
+        this.fiveCoinCallOnce = true;
+
+        // Text
+        // ------------------------------------------------------
+        // Score : Used to display the game.settings.score value.
         this.Score = this.add.text(borderUISize + borderPadding*45, borderUISize + borderPadding*2, 'Score: ' + 0, this.playConfig).setOrigin(0.5);
+
+        // Images
+        // ------------------------------------------------------
+        // FiveCoinAchivIMG : Used for displaying the achievement "5CoinAchiv".
+        this.FiveCoinAchivIMG = this.add.image(0, 0, '5CoinAchiv').setOrigin(0, 0);
+        this.FiveCoinAchivIMG.alpha = 0;
+
 
         // Available Keys
         // ------------------------------------------------------
@@ -130,9 +147,20 @@ class Play extends Phaser.Scene {
     update() {
 
         this.sky.tilePositionX += 3;
-        
-        this.checkGameOver(this.player);
 
+        // Achievement handling.
+        if (this.fiveCoinAchiv == 5 && this.fiveCoinCallOnce) {
+            this.fiveCoinCallOnce = false;
+            this.tweens.add({
+                targets: this.FiveCoinAchivIMG,
+                duration: 1500,
+                alpha: 1,
+                yoyo: true
+            });
+        }
+
+        // Handle GameOver and updating the objects in-game.
+        this.checkGameOver(this.player);
         if (this.gameOver) {
             this.displayEnd();
         }

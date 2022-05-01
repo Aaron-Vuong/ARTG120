@@ -57,6 +57,7 @@ class Obstacle extends Phaser.GameObjects.Sprite {
         else if (obstacle.texture.key == 'coin') {
             this.sparks.emitParticleAt(this.sprite.x, this.sprite.y, 10);
             game.settings.score += 200;
+            this.scene.fiveCoinAchiv += 1;
             this.scene.sound.play('CoinSound');
         }
         this.scene.Score.text = "Score: " + game.settings.score;
