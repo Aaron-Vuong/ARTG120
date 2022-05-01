@@ -143,8 +143,8 @@ class Play extends Phaser.Scene {
         })
 
         let playConfig = {
-            fontFamily: 'Courier',
-            fontSize: '28px',
+            fontFamily: 'GameFont',
+            fontSize: '40px',
             backgroundColor: '#0a0da8',
             color: '#ffffff',
             align: 'center',
@@ -248,8 +248,8 @@ class Play extends Phaser.Scene {
 
     displayEnd() {
         let playConfig = {
-            fontFamily: 'Courier',
-            fontSize: '28px',
+            fontFamily: 'GameFont',
+            fontSize: '36px',
             backgroundColor: '#0a0da8',
             color: '#ffffff',
             align: 'center',
