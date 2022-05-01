@@ -204,9 +204,11 @@ class Play extends Phaser.Scene {
             game.settings.cloudSpeed = game.settings.cloudSpeedOrig;
             game.settings.score = 0;
             this.song.stop();
+            this.sound.play('StartSound2');
             this.scene.restart();
         }
         if(this.gameOver && Phaser.Input.Keyboard.JustDown(keyM)) {
+            this.sound.play('StartSound2');
             this.scene.start("menuScene");
         }
         if (!this.gameOver) {
@@ -283,6 +285,12 @@ class Play extends Phaser.Scene {
     
 
     hitObstacle (player, obstacle) {
+        if (obstacle.texture.key == 'pug') {
+            this.sound.play('DogBark');
+        }
+        else if (obstacle.texture.key == 'cat') {
+            this.sound.play('CatMeow');
+        }
         this.badsparks.emitParticleAt(obstacle.x, obstacle.y, 10);
         game.settings.score -= 2;
         this.Score.text = "Score: " + game.settings.score*100;
@@ -304,6 +312,7 @@ class Play extends Phaser.Scene {
 
     goodhitObstacle (player, obstacle) {
         this.sparks.emitParticleAt(obstacle.x, obstacle.y, 10);
+        this.sound.play('CoinSound');
         game.settings.score += 2;
         this.Score.text = "Score: " + game.settings.score*100;
         obstacle.destroy();
