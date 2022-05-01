@@ -7,7 +7,6 @@
 // Visual Style: The font is handmade and implemented by Margarita. The visual style is
 // cohesive and the sounds are very fitting. The achievement looks really good.
 
-
 let config = {
     type: Phaser.CANVAS,
     width: 640, 
@@ -24,12 +23,12 @@ let config = {
 
 let game = new Phaser.Game(config); 
 
-//UI sizes
+// UI sizes
 let borderUISize = game.config.height / 15;
 let borderPadding = borderUISize / 3;
 
-//keyboard variables
+// Keyboard Variables
 let keyLEFT, keyRIGHT, keySPACE, keyR, keyA, keyD, keyM;
 
-//timer variable
+// Timer Events
 let timedEvent, updateScore, catGeneration, dogGeneration, coinGeneration;
