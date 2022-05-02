@@ -12,6 +12,8 @@ class Play extends Phaser.Scene {
         this.load.image('coin', './assets/coin.png');
         this.load.image('spark', './assets/spark.png');
         this.load.image('5CoinAchiv', './assets/5CoinAchiv.png');
+        this.load.image('2000ptsAchiv', './assets/2000ptsAchiv.png');
+        this.load.image('KilledByCatOrDogAchiv', './assets/KilledbyCatorDog.png');
         this.load.audio('music', './assets/bgMusic.wav');
         this.load.spritesheet('Bun', './assets/BunSpritesheet.png', {frameWidth: 1200, frameHeight: 900, startFrame: 0, endFrame: 14});
     }
@@ -44,9 +46,17 @@ class Play extends Phaser.Scene {
         // gameOver : Used for indicating the end of the game.
         // fiveCoinAchiv : Used for indicating the achievement "5CoinAchiv".
         // fiveCoinCallOnce : Used to only show the achievement "5CoinAchiv" once.
+        // twoKPtsAchiv : Used for indicating the achievement "2000ptsAchiv".
+        // twoKPtsCallOnce : Used to only show the achievement "2000ptsAchiv" once.
+        // killedByCatOrDogAchiv : Used for indicating the achievement "KilledByCatOrDogAchiv".
+        // killedByCatOrDogCallOnce : Used to only show the achievement "KilledByCatOrDogAchiv" once.
         this.gameOver = false;
         this.fiveCoinAchiv = 0;
         this.fiveCoinCallOnce = true;
+        this.twoKPtsAchiv = 0;
+        this.twoKPtsCallOnce = true;
+        this.killedByCatOrDogAchiv = 0;
+        this.killedByCatOrDogCallOnce = true;
 
         // Text
         // ------------------------------------------------------
@@ -56,8 +66,13 @@ class Play extends Phaser.Scene {
         // Images
         // ------------------------------------------------------
         // FiveCoinAchivIMG : Used for displaying the achievement "5CoinAchiv".
+        // twoKPtsAchivIMG : Used for displaying the achievement "2000ptsAchiv".
         this.FiveCoinAchivIMG = this.add.image(0, 0, '5CoinAchiv').setOrigin(0, 0);
         this.FiveCoinAchivIMG.alpha = 0;
+        this.twoKPtsAchivIMG = this.add.image(0, 0, '2000ptsAchiv').setOrigin(0, 0);
+        this.twoKPtsAchivIMG.alpha = 0;
+        this.killedByCatOrDogAchivIMG = this.add.image(0, 0, 'KilledByCatOrDogAchiv').setOrigin(0, 0);
+        this.killedByCatOrDogAchivIMG.alpha = 0;
 
 
         // Available Keys
@@ -149,10 +164,29 @@ class Play extends Phaser.Scene {
         this.sky.tilePositionX += 3;
 
         // Achievement handling.
+        this.twoKPtsAchiv = game.settings.score;
         if (this.fiveCoinAchiv == 5 && this.fiveCoinCallOnce) {
             this.fiveCoinCallOnce = false;
             this.tweens.add({
                 targets: this.FiveCoinAchivIMG,
+                duration: 1500,
+                alpha: 1,
+                yoyo: true
+            });
+        }
+        if (this.twoKPtsAchiv == 2000 && this.twoKPtsCallOnce) {
+            this.twoKPtsCallOnce = false;
+            this.tweens.add({
+                targets: this.twoKPtsAchivIMG,
+                duration: 1500,
+                alpha: 1,
+                yoyo: true
+            });
+        }
+        if (game.settings.score < 0 && this.killedByCatOrDogCallOnce) {
+            this.killedByCatOrDogCallOnce = false;
+            this.tweens.add({
+                targets: this.killedByCatOrDogAchivIMG,
                 duration: 1500,
                 alpha: 1,
                 yoyo: true
