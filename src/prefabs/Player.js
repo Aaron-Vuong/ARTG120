@@ -10,12 +10,13 @@ class Player extends Phaser.GameObjects.Sprite {
         this.sprite.setBounce(1, 1);
         this.scale = 0.1;
         this.sprite.scale = 0.1;
+        
+        // Animation Setup
         this.scene.anims.create({
             key: 'Bunny',
             frames: this.anims.generateFrameNumbers('Bun', {start: 0, end: 14, first: 0}),
             frameRate: 30
         });
-        // Animation Setup
         this.bounce = this.scene.add.sprite(this.sprite.x, this.sprite.y, 'Bun').setOrigin(0, 0);
         this.bounce.scale = 0.1;
         this.bounce.alpha = 0;

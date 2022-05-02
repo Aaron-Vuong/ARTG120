@@ -193,7 +193,7 @@ class Play extends Phaser.Scene {
             });
         }
 
-        // Handle GameOver and updating the objects in-game.
+        // Handle GameOver.
         this.checkGameOver(this.player);
         if (this.gameOver) {
             this.displayEnd();
@@ -209,6 +209,8 @@ class Play extends Phaser.Scene {
             this.sound.play('StartSound2');
             this.scene.start("menuScene");
         }
+
+        // Update in-game interactive objects.
         if (!this.gameOver) {
             this.player.update();
             for (let i = 0; i < this.cloudarr.length; i++) {
