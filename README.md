@@ -2,7 +2,7 @@ ARTG120 - Denae Fickes | Margarita Rodriguez | Aaron Vuong
 
 # Downpour
 
-Date Completed: ?
+Date Completed: May 2nd, 2022
 
 Creative Tilt
 ------------------------------------------------------
